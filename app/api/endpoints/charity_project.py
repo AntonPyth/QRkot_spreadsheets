@@ -11,7 +11,7 @@ from app.crud.charity_project import charity_project_crud
 from app.schemas.charity_project import (CharityProjectCreate,
                                          CharityProjectDB,
                                          CharityProjectUpdate)
-from app.services.services import closing_project, investment_process
+from app.services.services import marks_project_completed, distributes_investments
 
 router = APIRouter()
 
@@ -54,7 +54,7 @@ async def create_new_charity_project(
 ) -> CharityProjectDB:
     await check_project_name_duplicate(project.name, session)
     new_project = await charity_project_crud.create(project, session)
-    return await investment_process(new_project, session)
+    return await distributes_investments(new_project, session)
 
 
 @router.patch(
@@ -77,4 +77,4 @@ async def partially_update_charity_project(
             project_id, session
         )
     project = await charity_project_crud.update(project, obj_in, session)
-    return await closing_project(project, session)
+    return await marks_project_completed(project, session)

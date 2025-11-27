@@ -8,7 +8,7 @@ from app.models import CharityProject, Donation
 from app.models.donation_base import DonationsBase
 
 
-async def closing_project(project: CharityProject, session: AsyncSession):
+async def marks_project_completed(project: CharityProject, session: AsyncSession):
     """Отмечает проект полностью заполненным."""
     if project.full_amount == project.invested_amount:
         project.fully_invested = True
@@ -18,7 +18,7 @@ async def closing_project(project: CharityProject, session: AsyncSession):
     return project
 
 
-async def closing_single_investment(
+async def marks_single_investment(
     investment: DonationsBase,
     session: AsyncSession
 ):
@@ -28,8 +28,8 @@ async def closing_single_investment(
     investment.close_date = datetime.now()
 
 
-async def investment_process(
-    model_object: Union[CharityProject, Donation],
+async def distributes_investments(
+    model_object: DonationsBase,
     session: AsyncSession
 ):
     """Распределяет инвестиции между проектами."""
@@ -58,23 +58,23 @@ async def investment_process(
 
         if free_remaining < model_remaining:
             model_object.invested_amount += free_remaining
-            await closing_single_investment(free_object, session)
+            await marks_single_investment(free_object, session)
             model_remaining -= free_remaining
             continue
 
         if free_remaining == model_remaining:
-            await closing_single_investment(model_object, session)
-            await closing_single_investment(free_object, session)
+            await marks_single_investment(model_object, session)
+            await marks_single_investment(free_object, session)
             break
 
         free_object.invested_amount += model_remaining
-        await closing_single_investment(model_object, session)
+        await marks_single_investment(model_object, session)
         break
 
     await session.commit()
     await session.refresh(model_object)
 
     if isinstance(model_object, CharityProject):
-        await closing_project(model_object, session)
+        await marks_project_completed(model_object, session)
 
     return model_object

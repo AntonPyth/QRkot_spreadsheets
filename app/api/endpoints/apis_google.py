@@ -15,6 +15,7 @@ from app.services.apis_google import (set_user_permissions,
 
 router = APIRouter()
 
+
 @router.post(
     '/',
     response_model=List[Dict[str, Any]],

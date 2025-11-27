@@ -8,6 +8,7 @@ from app.models import User
 
 
 class CRUDBase:
+    """Базовый CRUD класс."""
 
     def __init__(self, model: Type[Any]) -> None:
         self.model = model

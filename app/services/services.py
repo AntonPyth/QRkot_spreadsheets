@@ -72,9 +72,8 @@ async def investment_process(
 
     await session.commit()
     await session.refresh(model_object)
-    
-    # Закрыть проект если он полностью инвестирован
+
     if isinstance(model_object, CharityProject):
         await closing_project(model_object, session)
-    
+
     return model_object

@@ -1,14 +1,16 @@
 from datetime import datetime
-from typing import Union
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import CharityProject, Donation
+from app.models import CharityProject
 from app.models.donation_base import DonationsBase
 
 
-async def marks_project_completed(project: CharityProject, session: AsyncSession):
+async def marks_project_completed(
+        project: CharityProject,
+        session: AsyncSession
+):
     """Отмечает проект полностью заполненным."""
     if project.full_amount == project.invested_amount:
         project.fully_invested = True

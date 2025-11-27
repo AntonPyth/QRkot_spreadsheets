@@ -11,7 +11,8 @@ from app.crud.charity_project import charity_project_crud
 from app.schemas.charity_project import (CharityProjectCreate,
                                          CharityProjectDB,
                                          CharityProjectUpdate)
-from app.services.services import marks_project_completed, distributes_investments
+from app.services.services import (distributes_investments,
+                                   marks_project_completed)
 
 router = APIRouter()
 

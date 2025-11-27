@@ -26,6 +26,19 @@ class Settings(BaseSettings):
     secret: str = 'CHANGE_ME'
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
+    # Google service account credentials (used by Google API client)
+    type: Optional[str] = None
+    project_id: Optional[str] = None
+    private_key_id: Optional[str] = None
+    private_key: Optional[str] = None
+    client_email: Optional[str] = None
+    client_id: Optional[str] = None
+    auth_uri: Optional[str] = None
+    token_uri: Optional[str] = None
+    auth_provider_x509_cert_url: Optional[str] = None
+    client_x509_cert_url: Optional[str] = None
+    # email is used in tests to verify existence of a credentials attribute
+    email: Optional[str] = None
 
     class Config:
         env_file = '.env'
@@ -33,3 +46,16 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+# Constants for Google Sheets/Drive integration
+DATE_FORMAT = '%d.%m.%Y %H:%M:%S'
+PERMISSION_BODY = {'role': 'writer', 'type': 'anyone'}
+SPREADSHEET_BODY = {
+    'properties': {
+        'title': 'Отчёт'
+    },
+    'sheets': []
+}
+TABLE_VALUES: list[list[str]] = [
+    ['Title', 'Date', 'Info']
+]

@@ -1,10 +1,11 @@
 from datetime import datetime
 from typing import Union
 
-from app.models import CharityProject, Donation
-from app.models.donation_base import DonationsBase
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models import CharityProject, Donation
+from app.models.donation_base import DonationsBase
 
 
 async def closing_project(project: CharityProject, session: AsyncSession):

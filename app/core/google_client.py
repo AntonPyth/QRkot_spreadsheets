@@ -3,9 +3,12 @@ from aiogoogle.auth.creds import ServiceAccountCreds
 
 from app.core.config import settings
 
+
+BASE_SCOPE = 'https://www.googleapis.com/auth/'
+
 SCOPES = [
-    'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive'
+    f'{BASE_SCOPE}spreadsheets',
+    f'{BASE_SCOPE}drive'
 ]
 
 INFO = {

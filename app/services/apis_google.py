@@ -1,17 +1,19 @@
+import copy
+
 from datetime import datetime, timedelta
 from typing import Any
 
 from aiogoogle import Aiogoogle
 
-from app.core.config import (DATE_FORMAT, PERMISSION_BODY, SPREADSHEET_BODY,
-                             TABLE_VALUES)
+from app.core.config import (DATE_FORMAT, PERMISSION_BODY,
+                             SPREADSHEET_BODY, TABLE_VALUES)
 from app.models.charity_project import CharityProject
 
 
 async def spreadsheets_create(wrapper_services: Aiogoogle) -> str:
     now_date_time = datetime.now().strftime(DATE_FORMAT)
     service = await wrapper_services.discover('sheets', 'v4')
-    spreadsheet_body: dict[str, Any] = SPREADSHEET_BODY
+    spreadsheet_body: dict[str, Any] = copy.deepcopy(SPREADSHEET_BODY)
     spreadsheet_body['properties']['title'] = f'Отчёт от {now_date_time}'
     response = await wrapper_services.as_service_account(
         service.spreadsheets.create(json=spreadsheet_body)

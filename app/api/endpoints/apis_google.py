@@ -2,7 +2,7 @@ import asyncio
 from typing import Any, Dict, List
 
 from aiogoogle import Aiogoogle
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
@@ -29,8 +29,19 @@ async def get_report(
         session
     )
     spreadsheet_id = await spreadsheets_create(wrapper_services)
-    await asyncio.gather(
-        set_user_permissions(spreadsheet_id, wrapper_services),
-        spreadsheets_update_value(spreadsheet_id, projects, wrapper_services),
-    )
-    return projects
+    try:
+        await asyncio.gather(
+            set_user_permissions(spreadsheet_id, wrapper_services),
+            spreadsheets_update_value(
+                spreadsheet_id,
+                projects,
+                wrapper_services
+            ),
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Ошибка в результате генерации отчета: {e}"
+        )
+    url = f'https://docs.google.com/spreadsheets/d/{spreadsheet_id}/edit'
+    return {'url': url}

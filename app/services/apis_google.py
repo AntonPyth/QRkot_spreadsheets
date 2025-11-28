@@ -10,7 +10,7 @@ from app.core.config import (DATE_FORMAT, PERMISSION_BODY,
 from app.models.charity_project import CharityProject
 
 
-async def spreadsheets_create(wrapper_services: Aiogoogle) -> str:
+async def spreadsheets_create(wrapper_services: Aiogoogle) -> tuple[str, str]:
     now_date_time = datetime.now().strftime(DATE_FORMAT)
     service = await wrapper_services.discover('sheets', 'v4')
     spreadsheet_body: dict[str, Any] = copy.deepcopy(SPREADSHEET_BODY)
@@ -18,8 +18,7 @@ async def spreadsheets_create(wrapper_services: Aiogoogle) -> str:
     response = await wrapper_services.as_service_account(
         service.spreadsheets.create(json=spreadsheet_body)
     )
-    spreadsheet_id = response['spreadsheetId']
-    return spreadsheet_id
+    return response['spreadsheetId'], response['spreadsheetUrl']
 
 
 async def set_user_permissions(

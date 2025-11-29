@@ -1,4 +1,5 @@
 import asyncio
+from http import HTTPStatus
 from typing import Any, Dict, List
 
 from aiogoogle import Aiogoogle
@@ -28,7 +29,9 @@ async def get_report(
     projects = await charity_project_crud.get_projects_by_completion_rate(
         session
     )
-    spreadsheet_id = await spreadsheets_create(wrapper_services)
+    spreadsheet_id, spreadsheet_url = await spreadsheets_create(
+        wrapper_services
+    )
     try:
         await asyncio.gather(
             set_user_permissions(spreadsheet_id, wrapper_services),
@@ -40,8 +43,7 @@ async def get_report(
         )
     except Exception as e:
         raise HTTPException(
-            status_code=500,
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
             detail=f"Ошибка в результате генерации отчета: {e}"
         )
-    url = f'https://docs.google.com/spreadsheets/d/{spreadsheet_id}/edit'
-    return {'url': url}
+    return {'url': spreadsheet_url}

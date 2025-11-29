@@ -3,7 +3,6 @@ from aiogoogle.auth.creds import ServiceAccountCreds
 
 from app.core.config import settings
 
-
 BASE_SCOPE = 'https://www.googleapis.com/auth/'
 
 SCOPES = [

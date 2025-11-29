@@ -1,12 +1,11 @@
 import copy
-
 from datetime import datetime, timedelta
 from typing import Any
 
 from aiogoogle import Aiogoogle
 
-from app.core.config import (DATE_FORMAT, PERMISSION_BODY,
-                             SPREADSHEET_BODY, TABLE_VALUES)
+from app.core.config import (DATE_FORMAT, PERMISSION_BODY, SPREADSHEET_BODY,
+                             TABLE_VALUES)
 from app.models.charity_project import CharityProject
 
 
